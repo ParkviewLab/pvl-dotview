@@ -7,7 +7,6 @@ name = "dotviewer"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "pygraphviz" },
     { name = "pyside6" },
 ]
 
@@ -18,22 +17,13 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "pygraphviz", specifier = ">=1.13" },
-    { name = "pyside6", specifier = ">=6.7" },
-]
+requires-dist = [{ name = "pyside6", specifier = ">=6.7" }]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "ruff" },
     { name = "ty" },
 ]
-
-[[package]]
-name = "pygraphviz"
-version = "1.14"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/66/ca/823d5c74a73d6b8b08e1f5aea12468ef334f0732c65cbb18df2a7f285c87/pygraphviz-1.14.tar.gz", hash = "sha256:c10df02377f4e39b00ae17c862f4ee7e5767317f1c6b2dfd04cea6acc7fc2bea", size = 106003, upload-time = "2024-09-29T18:31:12.471Z" }
 
 [[package]]
 name = "pyside6"

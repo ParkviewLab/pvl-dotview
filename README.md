@@ -6,20 +6,20 @@ additional windows with **⌘N** (macOS) or **Ctrl+N** (Linux/Windows).
 
 ## Install
 
+`dotviewer` shells out to the `dot` binary at runtime, so Graphviz must be
+installed system-wide before running.
+
 ### macOS
 
 ```bash
 brew install graphviz
-uv sync \
-  --config-settings="pygraphviz=--build-option=build_ext" \
-  --config-settings="pygraphviz=--build-option=-I$(brew --prefix graphviz)/include/" \
-  --config-settings="pygraphviz=--build-option=-L$(brew --prefix graphviz)/lib/"
+uv sync
 ```
 
 ### Linux (Debian/Ubuntu)
 
 ```bash
-sudo apt install graphviz graphviz-dev
+sudo apt install graphviz
 uv sync
 ```
 
