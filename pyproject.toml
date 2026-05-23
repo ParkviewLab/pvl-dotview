@@ -1,6 +1,6 @@
 [project]
 name = "pvl-dotview"
-version = "0.1.1"
+version = "0.1.2"
 description = "Interactive Graphviz DOT file viewer with pan, zoom, and multi-window support."
 readme = "README.md"
 requires-python = ">=3.11"
