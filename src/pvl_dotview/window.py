@@ -243,6 +243,16 @@ class PvlDotWindow(QMainWindow):
         except OSError as exc:
             QMessageBox.warning(self, "Cannot read file", f"{filename}\n\n{exc}")
             return
+        except Exception as exc:
+            # Catch-all so unexpected failures (UnicodeDecodeError, MemoryError,
+            # anything from the subprocess layer we didn't anticipate) show a
+            # dialog and the app keeps running instead of crashing.
+            QMessageBox.warning(
+                self,
+                "Unexpected error loading file",
+                f"{filename}\n\n{type(exc).__name__}: {exc}",
+            )
+            return
 
         self._view.setHtml(_build_html(svg_body))
         self.setWindowTitle(f"pvl-dotview — {filename}")
