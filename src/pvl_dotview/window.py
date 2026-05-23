@@ -1,4 +1,4 @@
-"""DotWindow — viewer window backed by QWebEngineView for browser-grade rendering."""
+"""PvlDotWindow — viewer window backed by QWebEngineView for browser-grade rendering."""
 
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ from PySide6.QtWidgets import QMainWindow, QWidget
 from .renderer import render_dot_to_svg
 
 if TYPE_CHECKING:
-    from .app import DotApp
+    from .app import PvlDotApp
 
 
 HTML_TEMPLATE = """<!DOCTYPE html>
@@ -200,8 +200,8 @@ class _DropFilter(QObject):
         return super().eventFilter(obj, event)
 
 
-class DotWindow(QMainWindow):
-    def __init__(self, app: DotApp) -> None:
+class PvlDotWindow(QMainWindow):
+    def __init__(self, app: PvlDotApp) -> None:
         super().__init__()
         self._app = app
         self.setWindowTitle("pvl-dotview")
