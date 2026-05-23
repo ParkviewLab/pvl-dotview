@@ -45,6 +45,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     will-change: transform;
   }
   #content svg { display: block; }
+  /* Invert/dark mode: GPU-applied 255-RGB inversion via the compositor. */
+  body.dark { background: #000000; }
+  body.dark #content { filter: invert(1); }
   .placeholder {
     display: flex; align-items: center; justify-content: center;
     height: 100vh; padding: 0 24px;
@@ -53,7 +56,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   }
 </style>
 </head>
-<body>
+<body class="__BODY_CLASS__">
 <div id="viewport"><div id="content">__CONTENT__</div></div>
 <script>
 (function(){
@@ -144,10 +147,6 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 PLACEHOLDER_BODY = '<div class="placeholder">Drop a .dot file here</div>'
 
 
-def _build_html(content: str) -> str:
-    return HTML_TEMPLATE.replace("__CONTENT__", content)
-
-
 def _strip_svg_prologue(svg_text: str) -> str:
     """Drop <?xml?> / <!DOCTYPE> for clean HTML embedding."""
     idx = svg_text.find("<svg")
@@ -201,6 +200,7 @@ class PvlDotWindow(QMainWindow):
     def __init__(self, app: PvlDotApp) -> None:
         super().__init__()
         self._app = app
+        self._dark = False
         self.setWindowTitle("pvl-dotview")
         self.resize(900, 700)
 
@@ -225,8 +225,29 @@ class PvlDotWindow(QMainWindow):
         new_action.triggered.connect(self._app.new_window)
         self.addAction(new_action)
 
+        invert_action = QAction("Invert Colors", self)
+        invert_action.setShortcut(QKeySequence("Ctrl+I"))  # auto-maps to ⌘I on macOS
+        invert_action.triggered.connect(self._toggle_dark)
+        self.addAction(invert_action)
+
+    def _build_html(self, content: str) -> str:
+        body_class = "dark" if self._dark else ""
+        return HTML_TEMPLATE.replace("__BODY_CLASS__", body_class).replace(
+            "__CONTENT__", content
+        )
+
+    def _toggle_dark(self) -> None:
+        self._dark = not self._dark
+        page = self._view.page()
+        # Apply via JS so we don't rebuild the page (preserves zoom/pan).
+        # The class is also baked in by _build_html on the next full load.
+        if self._dark:
+            page.runJavaScript("document.body.classList.add('dark')")
+        else:
+            page.runJavaScript("document.body.classList.remove('dark')")
+
     def _show_placeholder(self) -> None:
-        self._view.setHtml(_build_html(PLACEHOLDER_BODY))
+        self._view.setHtml(self._build_html(PLACEHOLDER_BODY))
 
     def _load(self, path: str) -> None:
         filename = os.path.basename(path)
@@ -254,7 +275,7 @@ class PvlDotWindow(QMainWindow):
             )
             return
 
-        self._view.setHtml(_build_html(svg_body))
+        self._view.setHtml(self._build_html(svg_body))
         self.setWindowTitle(f"pvl-dotview — {filename}")
 
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802
