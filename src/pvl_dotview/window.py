@@ -6,6 +6,8 @@ import os
 import re
 import sys
 from collections.abc import Callable
+from functools import cache
+from importlib.resources import files
 from typing import TYPE_CHECKING, cast
 
 from PySide6.QtCore import QChildEvent, QEvent, QObject
@@ -47,6 +49,14 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     will-change: transform;
   }
   #content svg { display: block; }
+  #logo {
+    position: fixed; top: 14px; right: 16px;
+    width: 140px; height: auto;
+    pointer-events: none;       /* let pan-drags through */
+    opacity: 0.9;
+    z-index: 10;
+  }
+  #logo svg { width: 100%; height: auto; display: block; }
   /* Invert/dark mode: GPU-applied lightness inversion with hue preserved.
      `invert(1)` flips R/G/B (which also flips hue by 180°).
      `hue-rotate(180deg)` rotates the hue back to where it was.
@@ -81,6 +91,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 </head>
 <body class="__BODY_CLASS__">
 <div id="viewport"><div id="content">__CONTENT__</div></div>
+<div id="logo">__LOGO_SVG__</div>
 <script>
 (function(){
   const viewport = document.getElementById('viewport');
@@ -171,6 +182,14 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
 
 DEFAULT_BG_COLOR = "#ffffff"
+
+
+@cache
+def _logo_svg() -> str:
+    """Load the bundled ParkviewLab logo SVG as a string (cached)."""
+    return (
+        files("pvl_dotview").joinpath("assets/parkview_lab_logo.svg").read_text()
+    )
 
 
 def _placeholder_html() -> str:
@@ -345,6 +364,7 @@ class PvlDotWindow(QMainWindow):
         return (
             HTML_TEMPLATE.replace("__BODY_CLASS__", body_class)
             .replace("__BG_COLOR__", bg_color)
+            .replace("__LOGO_SVG__", _logo_svg())
             .replace("__CONTENT__", content)
         )
 

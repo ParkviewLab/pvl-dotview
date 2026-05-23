@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="680"
+   height="440"
+   viewBox="0 0 680 440"
+   role="img"
+   version="1.1"
+   id="svg40"
+   sodipodi:docname="parkview_lab_color_horizontal_dark_final.svg"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview40"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.3213902"
+     inkscape:cx="332.98263"
+     inkscape:cy="208.49253"
+     inkscape:window-width="1472"
+     inkscape:window-height="894"
+     inkscape:window-x="0"
+     inkscape:window-y="34"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg40" />
+  <title
+     id="title1">Parkview Lab — color horizontal dark text</title>
+  <defs
+     id="defs1">
+    <style
+       id="style1">@import url('https://fonts.googleapis.com/css2?family=Michroma&amp;display=swap');
+.wm{font-family:'Michroma',sans-serif;fill:#111111;}
+.wm-stroke{font-family:'Michroma',sans-serif;fill:none;stroke:#111111;stroke-linejoin:round;}</style>
+  </defs>
+  <g
+     transform="translate(200,200)"
+     id="g37">
+    <!-- large tree -->
+    <rect
+       x="-88.572067"
+       y="39.569824"
+       width="9"
+       height="28"
+       fill="#90b095"
+       id="rect1" />
+    <circle
+       cx="-83"
+       cy="10"
+       r="30"
+       fill="#90b095"
+       id="circle1" />
+    <circle
+       cx="-111"
+       cy="20"
+       r="22"
+       fill="#90b095"
+       id="circle2" />
+    <circle
+       cx="-55"
+       cy="18"
+       r="21"
+       fill="#90b095"
+       id="circle3" />
+    <circle
+       cx="-119"
+       cy="4"
+       r="16"
+       fill="#90b095"
+       id="circle4" />
+    <circle
+       cx="-47"
+       cy="6"
+       r="15"
+       fill="#90b095"
+       id="circle5" />
+    <circle
+       cx="-99"
+       cy="-14"
+       r="24"
+       fill="#90b095"
+       id="circle6" />
+    <circle
+       cx="-71"
+       cy="-22"
+       r="20"
+       fill="#90b095"
+       id="circle7" />
+    <circle
+       cx="-103"
+       cy="-32"
+       r="16"
+       fill="#90b095"
+       id="circle8" />
+    <circle
+       cx="-79"
+       cy="-38"
+       r="15"
+       fill="#90b095"
+       id="circle9" />
+    <circle
+       cx="-59"
+       cy="-14"
+       r="13"
+       fill="#90b095"
+       id="circle10" />
+    <!-- small tree -->
+    <rect
+       x="-9.8206635"
+       y="37.498325"
+       width="6"
+       height="22"
+       fill="#90b095"
+       id="rect10" />
+    <circle
+       cx="-6"
+       cy="24"
+       r="17"
+       fill="#90b095"
+       id="circle11" />
+    <circle
+       cx="-23"
+       cy="27"
+       r="13"
+       fill="#90b095"
+       id="circle12" />
+    <circle
+       cx="10"
+       cy="25"
+       r="12"
+       fill="#90b095"
+       id="circle13" />
+    <circle
+       cx="-15"
+       cy="10"
+       r="13"
+       fill="#90b095"
+       id="circle14" />
+    <circle
+       cx="3"
+       cy="11"
+       r="14"
+       fill="#90b095"
+       id="circle15" />
+    <circle
+       cx="-8.2837906"
+       cy="-4.7139649"
+       r="11"
+       fill="#90b095"
+       id="circle16" />
+    <circle
+       cx="2"
+       cy="-4.1441402"
+       r="7"
+       fill="#90b095"
+       id="circle17" />
+    <!-- node + signal -->
+    <g
+       transform="matrix(0.89966013,0,0,0.89966013,-22.127159,-20.651162)"
+       id="g36">
+      <g
+         transform="matrix(0.9974289,0,0,0.9974289,-37.387768,29.715272)"
+         id="g35">
+        <path
+           d="m -16,-78 a 28,28 0 0 1 32,0"
+           fill="none"
+           stroke="#14494d"
+           stroke-width="4"
+           stroke-linecap="square"
+           id="path17" />
+        <path
+           d="m -28,-88 a 46,46 0 0 1 56,0"
+           fill="none"
+           stroke="#14494d"
+           stroke-width="2.5"
+           stroke-linecap="square"
+           id="path18" />
+        <polyline
+           points="0,-28 0,-36 0,-62"
+           fill="none"
+           stroke="#14494d"
+           stroke-width="6"
+           stroke-linecap="square"
+           stroke-linejoin="miter"
+           id="polyline18" />
+        <polyline
+           points="24,-14 32,-22 53.7,-28"
+           fill="none"
+           stroke="#14494d"
+           stroke-width="6"
+           stroke-linecap="square"
+           stroke-linejoin="miter"
+           id="polyline19" />
+        <polyline
+           points="-24,-14 -32,-22 -53.7,-28"
+           fill="none"
+           stroke="#14494d"
+           stroke-width="6"
+           stroke-linecap="square"
+           stroke-linejoin="miter"
+           id="polyline20" />
+        <polyline
+           points="0,28 0,35 0,56"
+           fill="none"
+           stroke="#14494d"
+           stroke-width="4.5"
+           stroke-linecap="square"
+           stroke-linejoin="miter"
+           id="polyline21" />
+        <polyline
+           points="24,14 30,20 46,28"
+           fill="none"
+           stroke="#14494d"
+           stroke-width="4.5"
+           stroke-linecap="square"
+           stroke-linejoin="miter"
+           id="polyline22" />
+        <polyline
+           points="-24,14 -30,20 -46,28"
+           fill="none"
+           stroke="#14494d"
+           stroke-width="4.5"
+           stroke-linecap="square"
+           stroke-linejoin="miter"
+           id="polyline23" />
+        <circle
+           cx="0"
+           cy="-62"
+           r="11"
+           fill="#14494d"
+           id="circle23" />
+        <circle
+           cx="0"
+           cy="-62"
+           r="6.425931"
+           fill="#9aeef0"
+           id="circle24" />
+        <circle
+           cx="53.700001"
+           cy="-31"
+           r="11"
+           fill="#14494d"
+           id="circle25" />
+        <circle
+           cx="53.700001"
+           cy="-31"
+           r="6.425931"
+           fill="#9aeef0"
+           id="circle26" />
+        <circle
+           cx="-53.700001"
+           cy="-31"
+           r="11"
+           fill="#14494d"
+           id="circle27" />
+        <circle
+           cx="-53.700001"
+           cy="-31"
+           r="6.425931"
+           fill="#9aeef0"
+           id="circle28" />
+        <circle
+           cx="0"
+           cy="56"
+           r="9"
+           fill="#14494d"
+           id="circle29" />
+        <circle
+           cx="0"
+           cy="56"
+           r="4.9227018"
+           fill="#9aeef0"
+           id="circle30" />
+        <circle
+           cx="46"
+           cy="28"
+           r="9"
+           fill="#14494d"
+           id="circle31" />
+        <circle
+           cx="46"
+           cy="28"
+           r="4.9227018"
+           fill="#9aeef0"
+           id="circle32" />
+        <circle
+           cx="-46"
+           cy="28"
+           r="9"
+           fill="#14494d"
+           id="circle33" />
+        <circle
+           cx="-46"
+           cy="28"
+           r="4.9227018"
+           fill="#9aeef0"
+           id="circle34" />
+        <polygon
+           points="0,28 -24,14 -24,-14 0,-28 24,-14 24,14"
+           fill="#14494d"
+           id="polygon34" />
+        <polygon
+           points="0,23 -20,11.5 -20,-11.5 0,-23 20,-11.5 20,11.5"
+           fill="#9aeef0"
+           id="polygon35" />
+        <line
+           x1="0"
+           y1="-23"
+           x2="0"
+           y2="23"
+           stroke="#14494d"
+           stroke-width="3"
+           stroke-linecap="square"
+           id="line35" />
+      </g>
+    </g>
+  </g>
+  <text
+     x="228"
+     y="192.75677"
+     class="wm-stroke"
+     font-size="36px"
+     letter-spacing="2"
+     stroke-width="1.2"
+     id="text37">PARKVIEW</text>
+  <text
+     x="228"
+     y="192.75677"
+     class="wm"
+     font-size="36px"
+     letter-spacing="2"
+     id="text38">PARKVIEW</text>
+  <polygon
+     points="514,228 511,231 248,231 248,228 "
+     fill="#14494d"
+     id="polygon38"
+     transform="translate(-20,-23.243221)" />
+  <text
+     x="228"
+     y="232.75677"
+     class="wm-stroke"
+     font-size="20px"
+     letter-spacing="6"
+     stroke-width="1.2"
+     id="text39">LAB</text>
+  <text
+     x="228"
+     y="232.75677"
+     class="wm"
+     font-size="20px"
+     letter-spacing="6"
+     id="text40">LAB</text>
+</svg>
