@@ -45,9 +45,13 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     will-change: transform;
   }
   #content svg { display: block; }
-  /* Invert/dark mode: GPU-applied 255-RGB inversion via the compositor. */
+  /* Invert/dark mode: GPU-applied lightness inversion with hue preserved.
+     `invert(1)` flips R/G/B (which also flips hue by 180°).
+     `hue-rotate(180deg)` rotates the hue back to where it was.
+     Net effect: lightness inverted, hue + saturation preserved
+     (≈ HSL/HSI `L = 1 − L` with hue and saturation untouched). */
   body.dark { background: #000000; }
-  body.dark #content { filter: invert(1); }
+  body.dark #content { filter: invert(1) hue-rotate(180deg); }
   .placeholder {
     display: flex; align-items: center; justify-content: center;
     height: 100vh; padding: 0 24px;
