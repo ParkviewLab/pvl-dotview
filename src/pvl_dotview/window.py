@@ -51,7 +51,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   #content svg { display: block; }
   #logo {
     position: fixed; top: 14px; right: 16px;
-    width: 140px; height: auto;
+    width: 420px; height: auto;
     pointer-events: none;       /* let pan-drags through */
     opacity: 0.9;
     z-index: 10;
@@ -76,10 +76,11 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   }
   .placeholder .big { font-size: 16px; }
   .placeholder .hints {
-    display: grid; grid-template-columns: auto auto;
-    gap: 8px 16px; align-items: center;
-    font-size: 13px; text-align: left;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 8px;
+    font-size: 13px;
   }
+  .placeholder .hints kbd { margin-right: 6px; }
   .placeholder kbd {
     display: inline-block; padding: 2px 8px;
     border: 1px solid #bbb; border-radius: 4px;
@@ -87,6 +88,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     font-family: ui-monospace, Menlo, monospace; font-size: 12px;
     white-space: nowrap;
   }
+  /* When no graph is loaded, the viewport is "inert": no grab cursor. */
+  #viewport:not(:has(svg)) { cursor: default; }
 </style>
 </head>
 <body class="__BODY_CLASS__">
@@ -131,7 +134,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     applyTransform();
   }
 
+  function hasGraph() { return content.querySelector('svg') !== null; }
+
   viewport.addEventListener('wheel', (e) => {
+    if (!hasGraph()) return;     // no zoom on the placeholder
     e.preventDefault();
     const delta = e.deltaY;
     let factor = Math.pow(ZOOM_BASE, -delta);
@@ -149,7 +155,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
   let panning = false, lastX = 0, lastY = 0;
   viewport.addEventListener('mousedown', (e) => {
-    if (e.button !== 0) return;
+    if (e.button !== 0 || !hasGraph()) return;   // no pan on the placeholder
     panning = true;
     lastX = e.clientX; lastY = e.clientY;
     viewport.classList.add('panning');
@@ -199,9 +205,9 @@ def _placeholder_html() -> str:
         '<div class="placeholder">'
         '<div class="big">Drop a .dot file here</div>'
         '<div class="hints">'
-        f"<div><kbd>{cmd}N</kbd></div><div>new window</div>"
-        f"<div><kbd>{cmd}0</kbd></div><div>fit to window</div>"
-        f"<div><kbd>{cmd}I</kbd></div><div>invert colors</div>"
+        f"<div><kbd>{cmd}N</kbd>new window</div>"
+        f"<div><kbd>{cmd}0</kbd>fit to window</div>"
+        f"<div><kbd>{cmd}I</kbd>invert colors</div>"
         "</div>"
         "</div>"
     )
