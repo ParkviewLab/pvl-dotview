@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 from collections.abc import Callable
 from typing import TYPE_CHECKING, cast
 
@@ -31,7 +32,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <style>
   html, body {
     margin: 0; padding: 0; width: 100%; height: 100%;
-    overflow: hidden; background: #ffffff;
+    overflow: hidden; background: __BG_COLOR__;
     -webkit-user-select: none; user-select: none;
   }
   #viewport {
@@ -138,6 +139,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     viewport.classList.remove('panning');
   });
 
+  // Expose so Python (via runJavaScript) can trigger ⌘0 fit-to-window.
+  window.fitToViewport = fitToViewport;
+
   // Initial fit. setTimeout 0 lets the SVG layout settle first.
   setTimeout(fitToViewport, 0);
   window.addEventListener('load', fitToViewport);
@@ -149,12 +153,23 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
 
 PLACEHOLDER_BODY = '<div class="placeholder">Drop a .dot file here</div>'
+DEFAULT_BG_COLOR = "#ffffff"
+
+# Graphviz always emits the graph background as the first <polygon> with
+# stroke="none" (subsequent polygons are nodes/arrowheads and have a stroke).
+_BG_POLYGON_RE = re.compile(r'<polygon\s+fill="([^"]+)"\s+stroke="none"\s+points=')
 
 
 def _strip_svg_prologue(svg_text: str) -> str:
     """Drop <?xml?> / <!DOCTYPE> for clean HTML embedding."""
     idx = svg_text.find("<svg")
     return svg_text[idx:] if idx >= 0 else svg_text
+
+
+def _extract_svg_bg_color(svg_text: str) -> str:
+    """Return the graph background fill (CSS-compatible) or default white."""
+    m = _BG_POLYGON_RE.search(svg_text)
+    return m.group(1) if m else DEFAULT_BG_COLOR
 
 
 class _DropFilter(QObject):
@@ -234,10 +249,17 @@ class PvlDotWindow(QMainWindow):
         invert_action.triggered.connect(self._toggle_dark)
         self.addAction(invert_action)
 
-    def _build_html(self, content: str) -> str:
+        fit_action = QAction("Fit to Window", self)
+        fit_action.setShortcut(QKeySequence("Ctrl+0"))  # auto-maps to ⌘0 on macOS
+        fit_action.triggered.connect(self._fit_to_window)
+        self.addAction(fit_action)
+
+    def _build_html(self, content: str, bg_color: str = DEFAULT_BG_COLOR) -> str:
         body_class = "dark" if self._dark else ""
-        return HTML_TEMPLATE.replace("__BODY_CLASS__", body_class).replace(
-            "__CONTENT__", content
+        return (
+            HTML_TEMPLATE.replace("__BODY_CLASS__", body_class)
+            .replace("__BG_COLOR__", bg_color)
+            .replace("__CONTENT__", content)
         )
 
     def _toggle_dark(self) -> None:
@@ -249,6 +271,13 @@ class PvlDotWindow(QMainWindow):
             page.runJavaScript("document.body.classList.add('dark')")
         else:
             page.runJavaScript("document.body.classList.remove('dark')")
+
+    def _fit_to_window(self) -> None:
+        # JS function is exposed as window.fitToViewport. Guarded so a stray
+        # ⌘0 over the placeholder page doesn't error if it's not yet bound.
+        self._view.page().runJavaScript(
+            "if (window.fitToViewport) window.fitToViewport()"
+        )
 
     def _show_placeholder(self) -> None:
         self._view.setHtml(self._build_html(PLACEHOLDER_BODY))
@@ -279,7 +308,8 @@ class PvlDotWindow(QMainWindow):
             )
             return
 
-        self._view.setHtml(self._build_html(svg_body))
+        bg_color = _extract_svg_bg_color(svg_body)
+        self._view.setHtml(self._build_html(svg_body, bg_color))
         self.setWindowTitle(f"pvl-dotview — {filename}")
 
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802
