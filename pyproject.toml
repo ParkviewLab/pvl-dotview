@@ -1,0 +1,32 @@
+[project]
+name = "dotviewer"
+version = "0.1.0"
+description = "Interactive Graphviz DOT file viewer with pan, zoom, and multi-window support."
+requires-python = ">=3.11"
+dependencies = [
+    "PySide6>=6.7",
+    "pygraphviz>=1.13",
+]
+
+[project.scripts]
+dotviewer = "dotviewer.__main__:main"
+
+[dependency-groups]
+dev = ["ruff", "ty"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dotviewer"]
+
+[tool.ruff]
+line-length = 100
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ty.environment]
+root = ["./src"]

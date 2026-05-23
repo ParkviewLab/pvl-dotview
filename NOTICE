@@ -1,0 +1,31 @@
+Py-DOT-Views
+Copyright (c) 2026 Gary
+
+This product is licensed under the MIT License (see LICENSE).
+
+This product bundles or dynamically links against the following third-party
+software, each under its own license:
+
+-------------------------------------------------------------------------------
+PySide6
+Copyright (c) The Qt Company Ltd.
+Licensed under the GNU Lesser General Public License v3.0 (LGPL-3.0).
+Source: https://code.qt.io/cgit/pyside/pyside-setup.git/
+License text: https://www.gnu.org/licenses/lgpl-3.0.html
+
+PySide6 is used as a dynamically-linked Python import, in accordance with
+section 4 of the LGPL-3.0. Users may replace the PySide6 installation with a
+modified version by installing a different version into the Python environment.
+
+-------------------------------------------------------------------------------
+pygraphviz
+Copyright (c) 2004-2025 Aric Hagberg, Dan Schult, Manos Renieris,
+and the NetworkX developers.
+Licensed under the BSD 3-Clause License.
+Source: https://github.com/pygraphviz/pygraphviz
+
+-------------------------------------------------------------------------------
+Graphviz (system dependency, invoked by pygraphviz)
+Copyright (c) AT&T Corp. and contributors.
+Licensed under the Common Public License 1.0 / Eclipse Public License 1.0.
+Source: https://gitlab.com/graphviz/graphviz
