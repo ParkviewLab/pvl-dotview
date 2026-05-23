@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import re
+import sys
 from collections.abc import Callable
 from typing import TYPE_CHECKING, cast
 
@@ -50,14 +51,31 @@ HTML_TEMPLATE = """<!DOCTYPE html>
      `invert(1)` flips R/G/B (which also flips hue by 180°).
      `hue-rotate(180deg)` rotates the hue back to where it was.
      Net effect: lightness inverted, hue + saturation preserved
-     (≈ HSL/HSI `L = 1 − L` with hue and saturation untouched). */
-  body.dark { background: #000000; }
-  body.dark #content { filter: invert(1) hue-rotate(180deg); }
+     (≈ HSL/HSI `L = 1 − L` with hue and saturation untouched).
+
+     The filter is applied to the whole body so the body's background
+     color goes through the SAME transformation as the SVG's background
+     polygon — they stay matched by construction. */
+  body.dark { filter: invert(1) hue-rotate(180deg); }
   .placeholder {
-    display: flex; align-items: center; justify-content: center;
-    height: 100vh; padding: 0 24px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    height: 100vh; padding: 0 24px; gap: 28px;
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-    text-align: center; color: #888; font-size: 16px;
+    text-align: center; color: #888;
+  }
+  .placeholder .big { font-size: 16px; }
+  .placeholder .hints {
+    display: grid; grid-template-columns: auto auto;
+    gap: 8px 16px; align-items: center;
+    font-size: 13px; text-align: left;
+  }
+  .placeholder kbd {
+    display: inline-block; padding: 2px 8px;
+    border: 1px solid #bbb; border-radius: 4px;
+    background: #f5f5f5; color: #333;
+    font-family: ui-monospace, Menlo, monospace; font-size: 12px;
+    white-space: nowrap;
   }
 </style>
 </head>
@@ -152,8 +170,22 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 """
 
 
-PLACEHOLDER_BODY = '<div class="placeholder">Drop a .dot file here</div>'
 DEFAULT_BG_COLOR = "#ffffff"
+
+
+def _placeholder_html() -> str:
+    """Build the empty-window placeholder with platform-correct shortcut hints."""
+    cmd = "⌘" if sys.platform == "darwin" else "Ctrl+"
+    return (
+        '<div class="placeholder">'
+        '<div class="big">Drop a .dot file here</div>'
+        '<div class="hints">'
+        f"<div><kbd>{cmd}N</kbd></div><div>new window</div>"
+        f"<div><kbd>{cmd}0</kbd></div><div>fit to window</div>"
+        f"<div><kbd>{cmd}I</kbd></div><div>invert colors</div>"
+        "</div>"
+        "</div>"
+    )
 
 # Graphviz always emits the graph background as the first <polygon> with
 # stroke="none" (subsequent polygons are nodes/arrowheads and have a stroke).
@@ -235,24 +267,78 @@ class PvlDotWindow(QMainWindow):
             child.setAcceptDrops(True)
             child.installEventFilter(self._drop_filter)
 
+        self._build_actions()
+        self._install_menus()
         self._show_placeholder()
-        self._install_shortcuts()
 
-    def _install_shortcuts(self) -> None:
-        new_action = QAction("New Window", self)
-        new_action.setShortcut(QKeySequence.StandardKey.New)
-        new_action.triggered.connect(self._app.new_window)
-        self.addAction(new_action)
+    def _build_actions(self) -> None:
+        """Create the QActions used by both keyboard shortcuts and the menu bar.
 
-        invert_action = QAction("Invert Colors", self)
-        invert_action.setShortcut(QKeySequence("Ctrl+I"))  # auto-maps to ⌘I on macOS
-        invert_action.triggered.connect(self._toggle_dark)
-        self.addAction(invert_action)
+        Saving them as attrs lets the menu bar reuse the same instances —
+        Qt then automatically displays each action's shortcut next to its
+        menu item.
+        """
+        self._new_action = QAction("New Window", self)
+        self._new_action.setShortcut(QKeySequence.StandardKey.New)
+        self._new_action.triggered.connect(self._app.new_window)
+        self.addAction(self._new_action)
 
-        fit_action = QAction("Fit to Window", self)
-        fit_action.setShortcut(QKeySequence("Ctrl+0"))  # auto-maps to ⌘0 on macOS
-        fit_action.triggered.connect(self._fit_to_window)
-        self.addAction(fit_action)
+        self._invert_action = QAction("Invert Colors", self)
+        self._invert_action.setShortcut(QKeySequence("Ctrl+I"))  # ⌘I on macOS
+        self._invert_action.setCheckable(True)
+        self._invert_action.triggered.connect(self._set_dark)
+        self.addAction(self._invert_action)
+
+        self._fit_action = QAction("Fit to Window", self)
+        self._fit_action.setShortcut(QKeySequence("Ctrl+0"))  # ⌘0 on macOS
+        self._fit_action.triggered.connect(self._fit_to_window)
+        self.addAction(self._fit_action)
+
+        self._quit_action = QAction("Quit", self)
+        self._quit_action.setShortcut(QKeySequence.StandardKey.Quit)
+        self._quit_action.setMenuRole(QAction.MenuRole.QuitRole)  # → macOS App menu
+        self._quit_action.triggered.connect(self._app._qapp.quit)
+        self.addAction(self._quit_action)
+
+        self._about_action = QAction("About pvl-dotview", self)
+        self._about_action.setMenuRole(QAction.MenuRole.AboutRole)  # → macOS App menu
+        self._about_action.triggered.connect(self._show_about)
+        self.addAction(self._about_action)
+
+    def _install_menus(self) -> None:
+        """Build the menu bar.
+
+        On macOS this attaches to the native top-of-screen menu bar; on
+        Linux/Windows it renders as an in-window strip below the title bar.
+        Quit and About carry MenuRole hints so macOS pulls them into the
+        Application (bold app-name) menu instead of File / Help.
+        """
+        menubar = self.menuBar()
+
+        file_menu = menubar.addMenu("File")
+        file_menu.addAction(self._new_action)
+        file_menu.addSeparator()
+        file_menu.addAction(self._quit_action)
+
+        view_menu = menubar.addMenu("View")
+        view_menu.addAction(self._fit_action)
+        view_menu.addAction(self._invert_action)
+
+        help_menu = menubar.addMenu("Help")
+        help_menu.addAction(self._about_action)
+
+    def _show_about(self) -> None:
+        QMessageBox.about(
+            self,
+            "About pvl-dotview",
+            "<h3>pvl-dotview</h3>"
+            "<p>Interactive Graphviz DOT file viewer.</p>"
+            "<p>Drag a <code>.dot</code> file onto the window to render it. "
+            "Pan, zoom, invert colors, open multiple windows.</p>"
+            "<p>MIT-licensed. © GaryCoding, Claude Code.</p>"
+            '<p><a href="https://github.com/ParkviewLab/pvl-dotview">'
+            "github.com/ParkviewLab/pvl-dotview</a></p>",
+        )
 
     def _build_html(self, content: str, bg_color: str = DEFAULT_BG_COLOR) -> str:
         body_class = "dark" if self._dark else ""
@@ -262,12 +348,13 @@ class PvlDotWindow(QMainWindow):
             .replace("__CONTENT__", content)
         )
 
-    def _toggle_dark(self) -> None:
-        self._dark = not self._dark
+    def _set_dark(self, on: bool) -> None:
+        """Apply / clear dark mode. Receives the new state from the QAction."""
+        self._dark = on
         page = self._view.page()
         # Apply via JS so we don't rebuild the page (preserves zoom/pan).
         # The class is also baked in by _build_html on the next full load.
-        if self._dark:
+        if on:
             page.runJavaScript("document.body.classList.add('dark')")
         else:
             page.runJavaScript("document.body.classList.remove('dark')")
@@ -280,7 +367,7 @@ class PvlDotWindow(QMainWindow):
         )
 
     def _show_placeholder(self) -> None:
-        self._view.setHtml(self._build_html(PLACEHOLDER_BODY))
+        self._view.setHtml(self._build_html(_placeholder_html()))
 
     def _load(self, path: str) -> None:
         filename = os.path.basename(path)
