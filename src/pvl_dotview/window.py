@@ -57,6 +57,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     z-index: 10;
   }
   #logo svg { width: 100%; height: auto; display: block; }
+  /* Hide the logo once a graph SVG is loaded into #content. */
+  body:has(#content > svg) #logo { display: none; }
   /* Invert/dark mode: GPU-applied lightness inversion with hue preserved.
      `invert(1)` flips R/G/B (which also flips hue by 180°).
      `hue-rotate(180deg)` rotates the hue back to where it was.
@@ -70,7 +72,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   .placeholder {
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    height: 100vh; padding: 0 24px; gap: 28px;
+    width: 100vw; height: 100vh; padding: 0 24px; box-sizing: border-box;
+    gap: 28px;
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
     text-align: center; color: #888;
   }
