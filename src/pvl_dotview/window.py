@@ -204,7 +204,7 @@ class DotWindow(QMainWindow):
     def __init__(self, app: DotApp) -> None:
         super().__init__()
         self._app = app
-        self.setWindowTitle("dotviewer")
+        self.setWindowTitle("pvl-dotview")
         self.resize(900, 700)
 
         self._view = QWebEngineView(self)
@@ -241,7 +241,7 @@ class DotWindow(QMainWindow):
             return
 
         self._view.setHtml(_build_html(svg_body))
-        self.setWindowTitle(f"dotviewer — {os.path.basename(path)}")
+        self.setWindowTitle(f"pvl-dotview — {os.path.basename(path)}")
 
     def _show_error(self, message: str) -> None:
         body = f'<div class="error">{html_module.escape(message)}</div>'

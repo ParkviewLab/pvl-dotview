@@ -1,0 +1,35 @@
+name: License check
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  licenses:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+
+      - name: Sync deps (including dev for pip-licenses)
+        run: uv sync
+
+      # Strict fail-list keeps copyleft (especially AGPL/SSPL) out of the
+      # transitive tree. PySide6 family is explicitly allowlisted because
+      # we use it as a dynamically-linked LGPL-3.0 dep (vetted in NOTICE);
+      # any *other* LGPL/GPL/AGPL/SSPL coming in transitively is a real
+      # signal worth investigating.
+      - name: Check transitive licenses
+        run: |
+          uv run pip-licenses \
+            --from=mixed \
+            --ignore-packages PySide6 shiboken6 PySide6_Addons PySide6_Essentials \
+            --fail-on="GPL;GPL v2;GPL v3;GNU General Public License;GNU General Public License v2 (GPLv2);GNU General Public License v3 (GPLv3);AGPL;Affero;GNU Affero General Public License v3;GNU Affero General Public License v3 (AGPLv3);LGPL;GNU Lesser General Public License;GNU Lesser General Public License v2 (LGPLv2);GNU Lesser General Public License v3 (LGPLv3);GNU Library or Lesser General Public License (LGPL);SSPL;Server Side Public License" \
+            --order=license
