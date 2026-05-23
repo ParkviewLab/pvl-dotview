@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import html as html_module
 import os
 from collections.abc import Callable
 from typing import TYPE_CHECKING, cast
@@ -17,9 +16,9 @@ from PySide6.QtGui import (
     QKeySequence,
 )
 from PySide6.QtWebEngineWidgets import QWebEngineView
-from PySide6.QtWidgets import QMainWindow, QWidget
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QWidget
 
-from .renderer import render_dot_to_svg
+from .renderer import GraphvizNotFoundError, GraphvizRenderError, render_dot_to_svg
 
 if TYPE_CHECKING:
     from .app import PvlDotApp
@@ -46,14 +45,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     will-change: transform;
   }
   #content svg { display: block; }
-  .placeholder, .error {
+  .placeholder {
     display: flex; align-items: center; justify-content: center;
     height: 100vh; padding: 0 24px;
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-    text-align: center; white-space: pre-wrap;
+    text-align: center; color: #888; font-size: 16px;
   }
-  .placeholder { color: #888; font-size: 16px; }
-  .error { color: #cc0000; font-size: 14px; }
 </style>
 </head>
 <body>
@@ -232,20 +229,23 @@ class PvlDotWindow(QMainWindow):
         self._view.setHtml(_build_html(PLACEHOLDER_BODY))
 
     def _load(self, path: str) -> None:
+        filename = os.path.basename(path)
         try:
             with open(path) as f:
                 dot_source = f.read()
             svg_body = _strip_svg_prologue(render_dot_to_svg(dot_source).decode("utf-8"))
-        except Exception as exc:
-            self._show_error(f"Failed to load {os.path.basename(path)}:\n{exc}")
+        except GraphvizNotFoundError as exc:
+            QMessageBox.warning(self, "Graphviz not installed", str(exc))
+            return
+        except GraphvizRenderError as exc:
+            QMessageBox.warning(self, "Cannot render DOT file", f"{filename}\n\n{exc}")
+            return
+        except OSError as exc:
+            QMessageBox.warning(self, "Cannot read file", f"{filename}\n\n{exc}")
             return
 
         self._view.setHtml(_build_html(svg_body))
-        self.setWindowTitle(f"pvl-dotview — {os.path.basename(path)}")
-
-    def _show_error(self, message: str) -> None:
-        body = f'<div class="error">{html_module.escape(message)}</div>'
-        self._view.setHtml(_build_html(body))
+        self.setWindowTitle(f"pvl-dotview — {filename}")
 
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802
         self._app.remove_window(self)
