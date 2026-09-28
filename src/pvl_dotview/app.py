@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 Gary Frattarola <garyf@parkviewlab.ai>
+#
+# SPDX-License-Identifier: MIT
+
 """PvlDotApp — application singleton owning the QApplication and window registry."""
 
 from __future__ import annotations
