@@ -367,7 +367,8 @@ class PvlDotWindow(QMainWindow):
             "<p>Interactive Graphviz DOT file viewer.</p>"
             "<p>Drag a <code>.dot</code> file onto the window to render it. "
             "Pan, zoom, invert colors, open multiple windows.</p>"
-            "<p>MIT-licensed. © 2026 Gary Frattarola.</p>"
+            "<p>MIT-licensed, except the ParkviewLab logo (all rights reserved). "
+            "© 2026 Gary Frattarola.</p>"
             '<p><a href="https://github.com/ParkviewLab/pvl-dotview">'
             "github.com/ParkviewLab/pvl-dotview</a></p>",
         )

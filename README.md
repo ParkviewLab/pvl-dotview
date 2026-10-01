@@ -34,9 +34,9 @@ uv run pvl-dotview
 
 ## License
 
-This project is released under the [MIT License](LICENSE).
+This project is released under the MIT License, except the bundled ParkviewLab logo (`src/pvl_dotview/assets/parkview_lab_logo.svg`), which is all rights reserved; see [LICENSING.md](LICENSING.md).
 
 Third-party components and their licenses are listed in [NOTICE](NOTICE):
 
 - **PySide6** (LGPL-3.0) — used as a dynamically-linked dependency
-- **Graphviz** (EPL-1.0, system dependency, invoked via the `dot` binary)
+- **Graphviz** (EPL-2.0; EPL-1.0 before Graphviz 14.1.4; system dependency, invoked via the `dot` binary)

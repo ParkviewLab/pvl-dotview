@@ -23,6 +23,8 @@ uv run ty check src/
 uvx --from "reuse[charset-normalizer]" reuse lint
 ```
 
+The licence check (`licenses`) runs `pip-licenses` in CI; see `.github/workflows/license-check.yml` for the exact command.
+
 A PR can't be merged until the required checks pass (lint and types, the licence check, REUSE, the version guard; see the handbook's `ci.md`). Push after each commit. See also `python-tooling.md`.
 
 ## Versioning
