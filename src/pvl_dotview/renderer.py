@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 Gary Frattarola <garyf@parkviewlab.ai>
+#
+# SPDX-License-Identifier: MIT
+
 """Render a DOT source string to SVG bytes via the graphviz `dot` binary."""
 
 from __future__ import annotations

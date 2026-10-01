@@ -1,5 +1,5 @@
 pvl-dotview
-Copyright (c) 2026 GaryCoding, Claude Code
+Copyright (c) 2026 Gary Frattarola
 
 This product is licensed under the MIT License (see LICENSE).
 
@@ -20,5 +20,5 @@ modified version by installing a different version into the Python environment.
 -------------------------------------------------------------------------------
 Graphviz (system dependency, invoked via the `dot` binary)
 Copyright (c) AT&T Corp. and contributors.
-Licensed under the Common Public License 1.0 / Eclipse Public License 1.0.
+Licensed under the Eclipse Public License 2.0 (EPL-1.0 before Graphviz 14.1.4).
 Source: https://gitlab.com/graphviz/graphviz

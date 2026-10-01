@@ -4,11 +4,10 @@ version = "0.1.3"
 description = "Interactive Graphviz DOT file viewer with pan, zoom, and multi-window support."
 readme = "README.md"
 requires-python = ">=3.11"
-license = "MIT"
-license-files = ["LICENSE"]
+license = "MIT AND LicenseRef-AllRightsReserved"
+license-files = ["LICENSE", "LICENSES/*.txt"]
 authors = [
-    { name = "GaryCoding" },
-    { name = "Claude Code" },
+    { name = "Gary Frattarola", email = "garyf@parkviewlab.ai" },
 ]
 keywords = ["graphviz", "dot", "viewer", "visualization", "gui", "diagram"]
 classifiers = [
@@ -22,7 +21,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Visualization",
 ]
 dependencies = [
-    "PySide6>=6.7",
+    "PySide6>=6.7,<7",
 ]
 
 [project.urls]

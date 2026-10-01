@@ -1,0 +1,21 @@
+# REUSE annotations: pvl-dotview is MIT throughout, code, documentation and
+# configuration alike; per-file SPDX headers, where present, name the same licence.
+# The bundled ParkviewLab logo is the one exception: all rights reserved, as the
+# handbook's licensing.md requires for the brand marks. See LICENSING.md.
+# Verify: uvx --from "reuse[charset-normalizer]" reuse lint
+version = 1
+
+SPDX-PackageName = "pvl-dotview"
+SPDX-PackageSupplier = "Gary Frattarola <garyf@parkviewlab.ai>"
+
+[[annotations]]
+path = ["**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "2026 Gary Frattarola <garyf@parkviewlab.ai>"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["src/pvl_dotview/assets/parkview_lab_logo.svg"]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Gary Frattarola <garyf@parkviewlab.ai>"
+SPDX-License-Identifier = "LicenseRef-AllRightsReserved"
